@@ -3,6 +3,7 @@ package com.javaproject.Models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,18 +18,15 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 20,name = "type_of_invoice")
+    @Column(nullable = true, length = 20,name = "type_of_invoice")
     private String invoiceType;
 
-    @Column(nullable = false,name = "total")
+    @Column(nullable = true,name = "total")
     private float invoiceTotal;
 
-    @Column( length = 20,name = "file_type")
-    private String fileType;
-
-    @Column( length = 500,name = "file_path")
-    private String filePath;
-
+    @Column(nullable = true, name="note")
+    @Size(max =255 )
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

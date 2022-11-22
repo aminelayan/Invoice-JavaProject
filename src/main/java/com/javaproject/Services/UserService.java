@@ -1,5 +1,6 @@
 package com.javaproject.Services;
 
+import com.javaproject.Models.Item;
 import com.javaproject.Models.User;
 import com.javaproject.Repositories.RoleRepository;
 import com.javaproject.Repositories.UserRepository;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -51,7 +53,18 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-
+    public User findById(Long id) {
+        Optional<User> optionalUser=userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        }
+        else {
+            return null;
+        }
+    }
+    public User editUser(User user){
+        return userRepository.save(user);
+    }
 }
 
 

@@ -1,11 +1,14 @@
 package com.javaproject.Controller;
 
 import com.javaproject.Models.Item;
+import com.javaproject.Models.Role;
 import com.javaproject.Models.User;
+import com.javaproject.Services.RoleService;
 import com.javaproject.Services.UserService;
 import com.javaproject.validation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +26,12 @@ public class UsersController {
     private UserService userService;
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UsersController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
@@ -68,13 +77,6 @@ public class UsersController {
     }
 
 
-    @RequestMapping("/admin")
-    public String adminPage(Principal principal, Model model) {
-        String username = principal.getName();
-        model.addAttribute("currentUser", userService.findByUsername(username));
-        return "admin.jsp";
-    }
-
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/users")
     public String showAllUsers(Model model, Principal principal) {
@@ -85,15 +87,33 @@ public class UsersController {
         return "users.jsp";
     }
 
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    @GetMapping("/users/{id}/edit")
-//    public String editUserPage(@ModelAttribute("editUser")User user,@PathVariable("id")Long id) {
-//        String username = principal.getName();
-//        model.addAttribute("currentUser", userService.findByUsername(username));
-//        List<User> allUsers = userService.getAllUsers();
-//        model.addAttribute("allUsers", allUsers);
-//        return "users.jsp";
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/users/{id}/edit")
+    public String editUserPage(@ModelAttribute("editUser") User user, @PathVariable("id") Long id, Principal principal, Model model) {
+        String username = principal.getName();
+        model.addAttribute("currentUser", userService.findByUsername(username));
+        User userToEdit = userService.findById(id);
+        model.addAttribute("user", userToEdit);
+        List<Role> allRoles = roleService.findAll();
+        model.addAttribute("roles",allRoles);
+        return "editUser.jsp";
 
     }
+
+    @PutMapping("/users/{id}/edit")
+    public String editUser(@Valid @ModelAttribute("editUser") User user, @PathVariable("id") Long id, Principal principal, Model model,BindingResult result){
+        if(result.hasErrors()) {
+            return "editUser.jsp";
+        }
+        User thisUser = userService.findById(id);
+        thisUser.setUsername(user.getUsername());
+        thisUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        thisUser.setRoles(user.getRoles());
+        userService.editUser(thisUser);
+
+
+        return "redirect:/users";
+    }
+}
 
 

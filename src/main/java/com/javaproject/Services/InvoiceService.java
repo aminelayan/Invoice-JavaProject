@@ -4,7 +4,6 @@ import com.javaproject.Models.Invoice;
 import com.javaproject.Models.InvoiceLogs;
 import com.javaproject.Models.Item;
 //import com.javaproject.Repositories.InvoiceItemsRepository;
-import com.javaproject.Repositories.InvoiceLogsRepository;
 import com.javaproject.Repositories.InvoiceRepository;
 import com.javaproject.Repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ public class InvoiceService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
-    @Autowired
-    private InvoiceLogsRepository invoiceLogsRepository;
 
     @Autowired
     private ItemRepository itemRepository;
@@ -48,6 +45,7 @@ public class InvoiceService {
 
     public Invoice createInvoice(Invoice invoice){
         return invoiceRepository.save(invoice);
+
     }
 
     public Invoice updateInvoice(Invoice invoice) {
@@ -59,10 +57,6 @@ public class InvoiceService {
         return invoiceRepository.save(invoice);
     }
 
-    public List<InvoiceLogs> getLogsofInvoices(long invoiceId) {
-        List<InvoiceLogs> logs = invoiceLogsRepository.findAllByInvoice_Id(invoiceId);
-        return  logs;
-    }
 
     public void deleteInvoice(Long id){
         Invoice deleteToInvoice = findInvoice(id);
@@ -73,10 +67,6 @@ public class InvoiceService {
         return itemRepository.findItemsByInvoices(id);
     }
 
-    public List<InvoiceLogs> getLogsofInvoices(Long invoiceId) {
-        List<InvoiceLogs> logs = invoiceLogsRepository.findAllByInvoice_Id(invoiceId);
-        return  logs;
-    }
 
 
 }

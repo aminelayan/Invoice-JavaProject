@@ -66,7 +66,7 @@ public class ItemController {
         itemService.editItem(item);
         return "redirect:/items";
     }
-    @DeleteMapping("/items/{id}/delete")
+    @GetMapping("/items/{id}/delete")
     public String deleteItem(@PathVariable("id")Long id){
         itemService.deleteItem(id);
         return "redirect:/items";

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -45,7 +46,9 @@ public class InvoiceController {
     }
 
     @GetMapping ("/invoices/new")
-    public String createPage(@ModelAttribute("newInvoices")Invoice invoice,Model model){
+    public String createPage(@ModelAttribute("newInvoices")Invoice invoice,Model model,Principal principal){
+        String username = principal.getName();
+        model.addAttribute("currentUser", userService.findByUsername(username));
         List<Item> allTheItem = itemService.findAll();
         model.addAttribute("item",allTheItem);
         return "createInvoice.jsp";
@@ -55,9 +58,15 @@ public class InvoiceController {
         String username = principal.getName();
         User user=userService.findByUsername(username);
         invoice.setUser(user);
+//        invoice.setNote("Hi");
         invoiceService.createInvoice(invoice);
         return "redirect:/invoices";
-
+    }
+    @GetMapping("/invoices/{id}")
+    public String viewInvoice(Model model, @PathVariable("id")Long id){
+        Invoice invoice=invoiceService.findInvoice(id);
+        model.addAttribute("invoice",invoice);
+        return "showInvoice.jsp";
     }
 
 
