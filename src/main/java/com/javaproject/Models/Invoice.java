@@ -1,10 +1,10 @@
 package com.javaproject.Models;
 
-import com.javaproject.enums.InvoiceTypes;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,15 +17,11 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20,name = "type_of_invoice")
-    private InvoiceTypes invoiceType;
+    private String invoiceType;
 
     @Column(nullable = false,name = "total")
     private float invoiceTotal;
-
-    @Column(nullable = false, name = "date_of_invoice")
-    private LocalDateTime invoiceDate;
 
     @Column( length = 20,name = "file_type")
     private String fileType;
@@ -37,4 +33,11 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "invoices_items",
+            joinColumns = @JoinColumn(name = "invoice_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id"))
+    private List<Item> items;
 }

@@ -6,6 +6,8 @@ import com.javaproject.Repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private UserRepository userRepository;
@@ -44,6 +46,12 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public List<User> getAllUsers(){
+        return (List<User>) userRepository.findAll();
+    }
+
+
 }
 
 
