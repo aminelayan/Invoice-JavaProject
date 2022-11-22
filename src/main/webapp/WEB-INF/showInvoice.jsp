@@ -28,7 +28,7 @@
 <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="/" class="logo d-flex align-items-center">
             <img src="/img/InvoiceTracker-logos.jpeg" alt="Logo">
             <span>Invoice Tracker</span>
         </a>
@@ -59,5 +59,12 @@
 <%--</form>--%>
 <%--<button style="margin-top: 10px" type="submit" class="btn btn-dark"><a href ='/invoice/${invoice.id}/edit'>Edit</a></button>--%>
 </div>
+<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/aos/aos.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/php-email-form/validate.js"></script>
 </body>
 </html>
